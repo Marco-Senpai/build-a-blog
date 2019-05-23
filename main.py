@@ -30,7 +30,7 @@ def new_post():
     if request.method == 'POST':    
         blog_title = request.form['blog_title']
         blog_body = request.form['blog_body']
-        title_error= ''
+        title_error = ''
         body_error = ''
         if len(blog_title) < 1:
             title_error = "please add an entry"
@@ -41,7 +41,7 @@ def new_post():
             db.session.add(new_blog)
             db.session.commit()
             cheese = "/blog?id=" + str(new_blog.id)
-            return redirect cheese
+            return redirect(cheese)
             
         else:
             return render_template('newpost.html', 
@@ -53,9 +53,9 @@ def new_post():
 @app.route('/blog', methods=['GET'])
 def blog():
     if request.args:
-        blog_id = request.args("id")
+        blog_id = request.args.get("id")
         blog = Blog.query.get(blog_id)
-        return render_template('blogs.html', blog=blog)
+        return render_template('display.html', blog=blog)
     else:
         blogs = Blog.query.all()
         return render_template('blogs.html', title="Build a Blog", blogs=blogs)
@@ -63,7 +63,8 @@ def blog():
 @app.route('/', methods=['GET'])
 def index():
     if request.method == 'GET':
-        return redirect('/blog')
+        cheese = "/blog?id=" + str(new_blog.id)
+        return redirect(cheese)
 
 if __name__ == '__main__':
     app.run()
